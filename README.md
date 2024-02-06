@@ -1,4 +1,4 @@
-# Eckmar (Eckmar's Marketplace Script)
+# Eckmar V2 (Eckmar's Marketplace Script)
 [![GitHub stars](https://img.shields.io/github/stars/dclipca/eckmar)](https://github.com/dclipca/eckmar/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/dclipca/eckmar)](https://github.com/dclipca/eckmar/network)
 [![GitHub issues](https://img.shields.io/github/issues/dclipca/eckmar)](https://github.com/dclipca/eckmar/issues)
