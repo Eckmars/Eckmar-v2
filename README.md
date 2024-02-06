@@ -1,7 +1,7 @@
 # Eckmar V2 (Eckmar's Marketplace Script)
-[![GitHub stars](https://img.shields.io/github/stars/dclipca/eckmar)](https://github.com/dclipca/eckmar/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/dclipca/eckmar)](https://github.com/dclipca/eckmar/network)
-[![GitHub issues](https://img.shields.io/github/issues/dclipca/eckmar)](https://github.com/dclipca/eckmar/issues)
+[![GitHub stars](https://img.shields.io/github/stars/eckmars/eckmar-v2)](https://github.com/eckmars/eckmar-v2/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/eckmars/eckmar)](https://github.com/eckmars/eckmar-v2/network)
+[![GitHub issues](https://img.shields.io/github/issues/eckmars/eckmar)](https://github.com/eckmars/eckmar-v2/issues)
 ![](https://img.shields.io/github/license/eckmarcommunity/eckmar)
 
 ![](https://github.com/nomiac-mobile/peralta/blob/master/demo/eckmar-background.jpg)
