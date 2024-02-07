@@ -79,6 +79,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
 
 
 
@@ -101,3 +102,9 @@ Exclusive Access: Unlock exclusive resources and documentation to maximize the p
 Ready to elevate your digital ventures? Head over to [BotDigit.com/Eckmar](https://botdigit.com/user/Eckmar) for a seamless experience. Discover the power of premium scripts and personalized support.
 
 🤝 Join Eckmar's Digital Revolution – Where Innovation Meets Support!
+
+
+
+
+
+
