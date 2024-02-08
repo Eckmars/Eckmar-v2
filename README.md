@@ -10,10 +10,10 @@ Eckmar is an open-source, cryptocurrency-friendly marketplace built on Laravel. 
 
 ![](https://github.com/Eckmars/Eckmar-v2/blob/master/demo/website.jpg)
 
-# [Installation](https://github.com/nomiac-mobile/peralta/blob/master/INSTALLATION.md)
-# [Connecting Coins (In Progress)](https://github.com/nomiac-mobile/peralta/blob/master/CONNECTING-COINS.md)
+## [Installation](https://github.com/nomiac-mobile/peralta/blob/master/INSTALLATION.md)
+## [Connecting Coins (In Progress)](https://github.com/nomiac-mobile/peralta/blob/master/CONNECTING-COINS.md)
 
-# Features
+## Features
 ### Vendor Accounts
 
 Any user can register and buy products on the marketplace but in order to create a listing you need to have vendor account status. Vendor status can be obtained in two ways. You can apply and get it for free after admin reviews your request or you can pay for it (the amount is set in admin panel).
@@ -48,63 +48,48 @@ Basically a blog that will appear on the first page. You can use it in case you 
 
 ### Auction System
 
-Products can be sold normally or as auction. You can specify end date, minimum bid and buyout prices. After that process is automatic. The system will automatically update the minimum bid (in case users actually bid on product of course) and when time reaches end date of an auction and no one bought it (buyout) user with largest bid will be the auction winner and all other users will be refunded.
+Products can be sold normally or as auction. You can specify end date, minimum bid and buyout prices. After that process is automatic. The system will automatically update the minimum bid (in case users actually bid
 
-### Admin Panel
-
-In the admin panel you can create categories, respond to vendor applications, disputes or create news.
-
-# Server requirements
-```
-VPS with at least 256MB of RAM
-Daemon for each coin that is enabled on marketplace
-```
-# Software Requirements
-```
-PHP7 (7.2 recommended)
-SQL Database (MySQL,PostgreSQL, SQLite, SQL Server)
-Elasticsearch (Search interface that will keep track of search records and provide great search performance)
-Redis (Optional, but will greatly increase app performance)
-```
-# General Retroactive Disclaimer
-```
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-```
 
-
-
-
-💻 Unlock Premium Scripts and Dedicated Support!
+## 💻 Unlock Premium Scripts and Dedicated Support!
 
 Explore a world of cutting-edge scripts and unparalleled support tailored just for you. Elevate your digital projects with our paid scripts and personalized assistance.
 
-🚀 Why Choose Eckmar's Paid Scripts?
+## 🚀 Why Choose Eckmar's Paid Scripts?
 
-Feature-Rich Solutions: Access scripts packed with advanced features, designed to meet the demands of modern development.
-Security and Stability: Invest in stability and security with our thoroughly tested and optimized scripts.
-Continuous Updates: Stay ahead with regular updates and new functionalities, ensuring your scripts are always up-to-date.
-🛡️ Dedicated Support at Your Fingertips:
+- **Feature-Rich Solutions:** Access scripts packed with advanced features, designed to meet the demands of modern development.
+- **Security and Stability:** Invest in stability and security with our thoroughly tested and optimized scripts.
+- **Continuous Updates:** Stay ahead with regular updates and new functionalities, ensuring your scripts are always up-to-date.
 
-Priority Assistance: Enjoy priority support to address your queries and concerns promptly.
-Customization Guidance: Get expert guidance on customizing scripts to align with your specific requirements.
-Exclusive Access: Unlock exclusive resources and documentation to maximize the potential of your scripts.
-🌐 Visit Our Platform:
+## 🛡️ Dedicated Support at Your Fingertips:
+
+- **Priority Assistance:** Enjoy priority support to address your queries and concerns promptly.
+- **Customization Guidance:** Get expert guidance on customizing scripts to align with your specific requirements.
+- **Exclusive Access:** Unlock exclusive resources and documentation to maximize the potential of your scripts.
+
+## 🌐 Visit Our Platform:
 Ready to elevate your digital ventures? Head over to [BotDigit.com/Eckmar](https://botdigit.com/user/Eckmar) for a seamless experience. Discover the power of premium scripts and personalized support.
 
-🤝 Join Eckmar's Digital Revolution – Where Innovation Meets Support!
+## 🤝 Join Eckmar's Digital Revolution – Where Innovation Meets Support!
 
+---
 
+## Contributing
 
+We welcome contributions from the community to improve Eckmar V2. Please follow these guidelines when contributing:
 
+1. Fork the repository and clone it locally.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and test thoroughly.
+4. Ensure your code follows the existing coding standards.
+5. Update documentation if necessary.
+6. Commit your changes and push to your fork.
+7. Create a new pull request to the `main` branch of the original repository.
 
+Thank you for contributing to Eckmar V2!
+
+---
 
