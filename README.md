@@ -8,7 +8,7 @@
 
 Eckmar is an open-source, cryptocurrency-friendly marketplace built on Laravel. If you made any kind of improvements, please consider making a pull request.
 
-![](https://github.com/Eckmars/Eckmar-v2/blob/master/demo/website.jpg)
+![](https://github.com/Eckmars/Eckmar-v2/blob/master/demo/eckmar-origial-image.png)
 
 ## [Installation](https://github.com/nomiac-mobile/peralta/blob/master/INSTALLATION.md)
 ## [Connecting Coins (In Progress)](https://github.com/nomiac-mobile/peralta/blob/master/CONNECTING-COINS.md)
