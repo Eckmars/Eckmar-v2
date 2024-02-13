@@ -4,7 +4,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/eckmars/eckmar)](https://github.com/eckmars/eckmar-v2/issues)
 ![](https://img.shields.io/github/license/eckmarcommunity/eckmar)
 
-![](https://github.com/Eckmars/Eckmar-v2/blob/master/demo/eckmar-background.jpg)
+![](https://github.com/Eckmars/Eckmar-v2/blob/master/demo/eckmarCrypto.jpg)
 
 Eckmar is an open-source, cryptocurrency-friendly marketplace built on Laravel. If you made any kind of improvements, please consider making a pull request.
 
