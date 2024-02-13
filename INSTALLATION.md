@@ -1,454 +1,277 @@
-You do not need to follow this tutorial. You can host **eckmar** on whatever server or system you want as long as your server meets the requiremnets.
 
-<details>
-  <summary>If your VPS doesn't have 2GB of RAM</summary>
-    
-  ```
-  
-If this is the case, you can use your disk memory as RAM using swap. Before continuing with this tutorial, check if your Ubuntu installation already has swap enabled by typing:
+---
 
-sudo swapon --show
+# Eckmar's Marketplace Script v2.0
 
-If the output is empty, it means that your system does not have swap space enabled.
-Otherwise, if you get something like below, you already have swap enabled on your machine.
+## Introduction
 
+This tutorial provides instructions for installing Eckmar's Marketplace Script v2.0. Please note that software requirements may change, so always look for the latest versions online. You are free to host the Marketplace on any server that meets the specified requirements.
 
-NAME      TYPE      SIZE USED PRIO
-/dev/sda2 partition 1.9G   0B   -2
+## Server Requirements
 
-Although possible, it is not common to have multiple swap spaces on a single machine.
+- VPS with at least 2GB of RAM
+- Daemon for each enabled coin on the marketplace
 
-The user you are logged in as must have sudo privileges to be able to activate swap. In this example, we will add 1G swap. If you want to add more swap, replace 1G with the size of the swap space you need. Perform the steps below to add swap space on Ubuntu 18.04 LTS.
+## Software Requirements
 
-Start by creating a file which will be used for swap:
+- PHP7 (7.2 recommended)
+- SQL Database (MySQL, PostgreSQL, SQLite, SQL Server)
+- Elasticsearch (for search functionality)
+- Redis (optional but recommended for improved performance)
 
-sudo fallocate -l 2G /swapfile
+## Installation Instructions
 
-If fallocate is not installed or you get an error message saying fallocate failed: Operation not supported then use the following command to create the swap file:
+This tutorial is based on Ubuntu 18.04.
 
+### Nginx
 
-sudo dd if=/dev/zero of=/swapfile bs=2048 count=1048576
+Install Nginx:
 
-Only the root user should be able to write and read the swap file. Set the correct permissions by typing:
-
-sudo chmod 600 /swapfile
-
-Use the `mkswap` utility to set up a Linux swap area on the file:
-
-sudo mkswap /swapfile
-
-Activate the swap file using the following command:
-
-sudo swapon /swapfile
-
-To make the change permanent open the `/etc/fstab` file:
-
-sudo nano /etc/fstab
-
-and paste the following line:
-
-/swapfile swap swap defaults 0 0
-
-
-Verify that the swap is active by using either the swapon or the free command, as shown below:
-
-sudo swapon --show
-
-
-NAME      TYPE  SIZE   USED PRIO
-/swapfile file 2048M 507.4M   -1
-```
-  
-</details>
-
-# Installation
-
-Most of this will be simple copy-paste commands that you enter in your VPS. I'm writing this tutorial based on Ubuntu 18.04. When you first login on your VPS run:
-```
+```bash
 sudo apt-get update
-```
-
-# Nginx
-You can use any web server you want (Apache for example) but I will use Nginx. To install it run:
-```
 sudo apt-get install nginx
-```
-After installation is done we need to allow nginx in firewall by running:
-```
 sudo ufw allow 'Nginx HTTP'
 ```
-After both steps are done, you should check whats your VPS IP address and enter that IP in a browser. You should see `welcome to nginx !` page. If you do see it, nginx is installed correctly.
 
-# MySQL
-Marketplace supports multiple databases like: MySQL,PostgreSQL, SQLite, SQL Server We will use MySQL.
-```
+### MySQL
+
+Install MySQL and secure the installation:
+
+```bash
 sudo apt-get install mysql-server
-```
-After MySQL is installed, run
-```
 mysql_secure_installation
-```
-that will guide you trough securing your MySQL connection.
-
-After secure installation is done, we need to create database for Marketplace by running series of commands:
-```
 mysql -u root -p
 ```
-```
+
+Create the Marketplace database:
+
+```sql
 CREATE DATABASE marketplace DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-```
-```
-CREATE USER 'INSERT_YOUR_USERNAME'@'localhost' IDENTIFIED BY 'INSERT_YOUR_PASSWORD';
-```
-```
-GRANT ALL PRIVILEGES ON * . * TO 'INSERT_YOUR_USERNAME'@'localhost';
-```
-```
-FLUSH PRIVILEGES;
-```
-```
 exit
 ```
-If afterwards in the installation process you are not able to connect to the MySQL database because of authentication problems, change the root password: https://support.rackspace.com/how-to/mysql-resetting-a-lost-mysql-root-password/
-# PHP
-We need to install PHP (PHP-FPM) to run our code:
-```
-sudo apt-get install php7.2-fpm php-mysql
-```
-After the installation is done, we can check if php is correctly installed by running:
-```
-php -v
-```
-It should say PHP 7.2
 
-We need to edit `php.ini` file. We can do that by runnin the command (assuming you installed php7.2, if you installed other version change that parameter)
-```
+### PHP
+
+Install PHP and edit php.ini:
+
+```bash
+sudo apt-get install php7.2-fpm php-mysql
 sudo nano /etc/php/7.2/fpm/php.ini
 ```
-Inside this file, there is commented line # cgi.fix_pathinfo=1 You need to uncomment the line and set value to cgi.fix_pathinfo=0 (without #)
 
-In order for changes to take effect, php-fpm must be restarted:
-```
+Uncomment the line `cgi.fix_pathinfo=1` and set the value to `cgi.fix_pathinfo=0`.
+
+Restart php-fpm:
+
+```bash
 sudo systemctl restart php7.2-fpm
 ```
 
+Install required PHP extensions, composer, and unzip tools:
 
-Now we need to install some PHP extensions that are required by Marketplace as well as composer and unzip tools.
-```
+```bash
 sudo apt-get install php7.2-mbstring php7.2-xml php7.2-xmlrpc php7.2-gmp php7.2-curl php7.2-gd composer unzip -y
 ```
-(Above code is single command)
 
-# Elasticsearch
+### Elasticsearch
 
-Marketplace uses Elasticsearch software that provices great search speeds and flexibility. Elasticsearch requires Java in order to run.
+Install Oracle JDK and Elasticsearch:
 
-# Oracle JDK
-Update apt
-```
+```bash
+sudo add-apt-repository ppa:webupd8team/java
 sudo apt update
+sudo apt install oracle-java8-installer
+sudo update-alternatives --config java
 ```
-Install Java:
+
+Edit environment file:
+
+```bash
+sudo nano /etc/environment
 ```
-sudo apt-get install openjdk-8-jdk
+
+Add:
+
+```bash
+JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre/bin/java"
 ```
-Now we need to use that path and create environment variable:
-```
-echo "JAVA_HOME=$(which java)" | sudo tee -a /etc/environment
-```
-```
+
+Reload the environment file:
+
+```bash
 source /etc/environment
-```
-To check if everything is working enter:
-```
 echo $JAVA_HOME
 ```
-The command should give same path as before as output.
 
-# Elasticsearch installation
+Install Elasticsearch:
 
-Now that java is installed, we can proceed with installation of Elasticsearch.
-```
+```bash
 wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.1/elasticsearch-2.3.1.deb
-```
-(Above code is single command)
-
-Download .deb package and install it with:
-```
 sudo dpkg -i elasticsearch-2.3.1.deb
 ```
 
-We want Elasticsearch service to start when system boots up, so we enter:
-```
-sudo systemctl enable elasticsearch.service
-```
-Now we need to start it up.
-```
-sudo systemctl start elasticsearch
-```
-Give it 10-15 seconds from last command, and then run:
-```
-curl -X GET "localhost:9200"
-```
-If you see information about your Elasticsearch engine, then installation is completed successfully.
+Start Elasticsearch:
 
-# Elasticsearch installation error
-Elasticsearch has some problems on servers with low memory. In order to make it work we need to limit max memory Java is using. To check if this is an issue run:
-```
-sudo service elasticsearch status
+```bash
+sudo service elasticsearch start
 ```
 
-If you see `There is insufficient memory for the Java Runtime...` inside the text, continue, if not then your installation is not done properly and you should remove all Elasticsearch packages and go back to installing it from the start.
+### Redis
 
-Enter:
+(Optional but recommended for improved performance)
 
-```
-edit /etc/elasticsearch/jvm.options
-```
+Install Redis and configure:
 
-Change to lower memory:
-```
--Xms512m -Xmx512m
-```
-
-Then restart Elasticsearch:
-```
-sudo systemctl restart elasticsearch
-```
-
-Give it 10-15 seconds and then run:
-```
-curl -X GET "localhost:9200"
-```
-
-If you see information about your Elasticsearch engine, then installation is completed successfully.
-
-# Redis
-This step is optional, but will greatly increase your app performance.
-```
-sudo apt install redis-server
-```
-After redis installation is done open redis config file:
-```
+```bash
+sudo apt-get install redis-server
 sudo nano /etc/redis/redis.conf
 ```
 
-In there find supervised and change it from supervised no to supervised systemd and save the file.
-Reload Redis with:
-```
+Change `supervised` from `no` to `systemd`. Reload Redis:
+
+```bash
 sudo systemctl restart redis.service
 ```
-And check if its running with
-```
-sudo systemctl status redis.service
-```
-To check if Redis is installed correctly enter:
-```
+
+Check if Redis is running:
+
+```bash
 redis-cli
 ```
-It should open Redis interface running on port 6379. By entering `ping` you should get response `PONG`.
-If everything is fine, type exit and exit redis-cli.
 
-# Node and NPM
-We need NodeJS and NPM in order to compile our client side css files.
+### Node and NPM
 
-Install NodeJS:
-```
+Install NodeJs and NPM:
+
+```bash
 sudo apt-get install -y nodejs
-```
-Install NPM:
-```
 sudo apt-get install -y npm
 ```
-To check if they are installed properly run:
-```
-node -v
-```
-```
-npm -v
-```
-(Above code are 2 commands)
-# Files
 
-Now we need to copy the files to the server.
-```
-cd /var/www/
-```
-```
-git clone https://github.com/eckmarcommunity/eckmar.git
-```
-# Permissions
+### Files
 
-After files are copied we need to give them permissions.
-```
-sudo chown -R www-data:www-data /var/www/eckmar/public
-```
-```
+Copy Marketplace files to the server in a new directory within `/var/www`.
+
+### Permissions
+
+Set permissions for files:
+
+```bash
+sudo chown -R www-data:www-data /var/www/DIRECTORY_NAME/public
 sudo chmod 755 /var/www
-```
-```
-sudo chmod -R 755 /var/www/eckmar/bootstrap/cache
-```
-```
-sudo chmod -R 755 /var/www/eckmar/storage
-```
-```
-sudo chown -R $USER:www-data /var/www/eckmar/storage
-```
-```
-sudo chown -R $USER:www-data /var/www/eckmar/bootstrap/cache
-```
-```
-sudo chmod -R 775 /var/www/eckmar/storage
-```
-```
-sudo chmod -R 775 /var/www/eckmar/bootstrap/cache
+sudo chmod -R 755 /var/www/DIRECTORY_NAME/bootstrap/cache
+sudo chmod -R 755 /var/www/DIRECTORY_NAME/storage
 ```
 
-Make this folder: (used for product pictures):
-```
-sudo mkdir /var/www/eckmar/storage/public/
-sudo mkdir /var/www/eckmar/storage/public/products
+Link public directory with storage:
+
+```bash
+php artisan storage:link
+sudo mkdir /var/www/DIRECTORY_NAME/storage/public/products
 ```
 
-And give it permissions
-```
-sudo chmod -R 755 /var/www/eckmar/storage/public/products
-```
-```
-sudo chgrp -R www-data /var/www/eckmar/storage/public/products
-```
-```
-sudo chmod -R ug+rwx /var/www/eckmar/storage/public/products
-```
-(Above code are 3 commands)
+### Nginx Config
 
-# Nginx Config
+Edit Nginx config:
 
-Nginx is installed but we didn't point it towards marketplace. To edit nginx config run:
-```
+```bash
 sudo nano /etc/nginx/sites-available/default
 ```
-I won't explain what most of the stuff does, so here is an example of configured file. Delete everything and paste this:
-```
+
+Example configuration:
+
+```nginx
 server {
-        listen 80;
-        listen [::]:80;
-        listen 443;
-        listen [::]:443;
-root /var/www/eckmar/public;
-index index.php index.html index.htm index.nginx-debian.html;
-server_name domain.com;
-location / {
-try_files $uri $uri/ /index.php?$query_string;
+    listen 80;
+    listen [::]:80;
+    listen 443;
+    listen [::]:443;
+    root /var/www/market/public;
+    index index.php index.html index.htm index.nginx-debian.html;
+    server_name domain.com;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
 }
-location ~ \.php$ {
-try_files $uri =404;
-fastcgi_split_path_info ^(.+\.php)(/.+)$;
-fastcgi_pass unix:/run/php/php7.2-fpm.sock;
-fastcgi_index index.php;
-fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; include fastcgi_params;
-} }
 ```
-After you change the parameters to reflect your environment run:
-```
+
+Check the configuration:
+
+```bash
 sudo nginx -t
 ```
 
-If your config file is correct output should be:
-```
-nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
-nginx: configuration file /etc/nginx/nginx.conf test is successful
-```
+### Installation
 
-# Installation
+Change to the directory where Marketplace files are located and run:
 
-After everything above is done, change current directory to the directory name you previously chose (I used **eckmar**) and run series of commands to install all required dependencies:
-```
-cd /var/www/eckmar
-```
-```
+```bash
 composer install
-```
-```
 npm install
-```
-```
 npm run prod
-```
-```
 cp .env.example .env
-```
-```
 php artisan key:generate
 ```
-Then open your .env file and insert database connection details:
-```
-sudo nano .env
-```
-Example of database configuration:
-```
+
+Open the `.env` file and insert database connection details.
+
+Example database configuration:
+
+```dotenv
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=marketplace
-DB_USERNAME=INSERT_YOUR_USERNAME
-DB_PASSWORD=INSERT_YOUR_PASSWORD
-```
-If you did install redis, change driver from sync to redis:
-```
+DB_USERNAME=root
+DB_PASSWORD=password
 CACHE_DRIVER=redis
 ```
-Now you can try running:
-```
+
+Migrate the database:
+
+```bash
 php artisan migrate
 ```
 
-Now, you can create some dummy data, with:
-```
-php artisan db:seed
+Create dummy data (optional):
+
+```bash
 ```
 
-If both commands ran fine, your connection to database is configured fine. If you want to get rid of dummy data, run:
-```
-php artisan migrate:fresh
-```
+If both commands ran successfully, your basic marketplace is now operational. Congratulations!
 
-Now, run this to link public directory with storage:
+### Connecting Coins
 
-```
-php artisan storage:link
-```
+Configure connection parameters for supported coins in the `.env` file:
 
-Restart Nginx:
-```
-sudo service nginx restart
-```
+- Bitcoin: BITCOIND_HOST=server_ip
+- Litecoin: LITECOIN_PASSWORD=password
+- Monero: MONERO_USER=username, MONERO_PASSWORD=password
+- Pivx: PIVX_USER=username, PIVX_PASSWORD=password
+- Dash: DASH_PASSWORD=password
+- Verge: VERGE_USER=username, VERGE_PASSWORD=password
+- Bitcoin Cash: BITCOIN_CASH_USER=username, BITCOIN_CASH_PASSWORD=password
 
-Your basic marketplace is working now, `Congratulations !`
+### Marketplace Configuration
 
-# Connecting coins
+Marketplace configuration is split into multiple files located in the `config` folder. The main configuration file is `marketplace.php`, and you can find additional configuration options in `experience.php` and `coins.php` for levels, experience, and profit addresses.
 
-Nomiac has support for various coins. Each coin has its on prefix in .env file as well as connection parameters. Connection paramters are:
-```
-HOST
-PORT
-USERNAME
-PASSWORD
-```
-And coin prefixes are:
-```
-Bitcoin - BITCOIND
-Litecoin - LITECOIN
-Monero - MONERO
-Pivx - PIVX
-Dash - DASH
-Verge - VERGE
-Bitcoin Cash - BITCOIN_CASH
-```
+### Installation Support
+If you prefer a hassle-free installation process with dedicated support, is ready to assist you. For just $50, you can take advantage of our paid installation support service. This service ensures a seamless setup of Eckmar's Marketplace Script v2.0 on your server, allowing you to focus on your digital ventures without the complexities of installation.
 
-Knowing this, you can input connection parameters in .env accordingly. For example, for Bitcoin you would enter `BITCOIND_HOST=server_ip`, or for `Dash DASH_PASSWORD=password`.
+### 🌐 Visit Our Platform
+Ready to elevate your digital ventures? Head over to **BotDigit.com/Eckmar** for a seamless experience. Discover the power of premium scripts and personalized support.
 
-# Marketplace configuration
 
-Marketplace configuration is split into multiple files located in config folder. Main one is marketplace.php You will find most of the config options described or self-explanatory. Other than marketplace.php You can configure levels and experience in experience.php and marketplace addresses for receiving profits in coins.php
+---
+
